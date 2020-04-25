@@ -14,16 +14,20 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
-from register.views import register
-from services.views import add_server, index_server, index_channel
+from django.urls import path, include, re_path
+from register.views import register, profile
+from services.views import add_server, index_server, index_channel, detail_channel, index_services
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('main.urls'), name="home"),
     path("register/", register, name="register"),
     path('', include("django.contrib.auth.urls")),
-    path("add_server/", add_server, name="add_server"),
+    path("servers/", include('services.urls'), name="servers"),
     path("<int:pk>/", index_channel, name="index_channel"),
-    path("servers", index_server, name="index_server"),
-]
+    path("", index_services, name="index_services"),
+    path("<int:server_pk>/<int:channel_pk>", detail_channel, name="detail_channel"),
+    path('profile/', profile, name="profile" ),
+    re_path('^accounts/', include('django.contrib.auth.urls')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

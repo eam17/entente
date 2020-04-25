@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Server, Channel
 from .forms import ServerForm, EmptyForm
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 # -----------------SERVERS-----------------
 
@@ -40,10 +41,17 @@ def add_server(request):
                 owner=request.user
             )
             newServer.save()
+            newChannel = Channel(
+                display_name="general",
+                type='text',
+                server=newServer
+            )
+            newChannel.save()
             # redirect to a new URL:
-            return redirect('../')
+            return redirect(reverse('detail_channel', args=(newServer.server_id, newChannel.channel_id)))
     # if a GET (or any other method) we'll create a blank form
     else:
+        print("Add another server message", flush=True)
         form = ServerForm()
     return render(request, 'add_server.html', {'form': form})
 
@@ -57,3 +65,26 @@ def index_channel(request, pk):
         "channels": channels,
     }
     return render(request, "channels.html", context)
+
+@login_required(login_url='/login/')
+def detail_channel(request, server_pk, channel_pk):
+    active_server = Server.objects.get(pk=server_pk)
+    active_channel = Channel.objects.get(pk=channel_pk)
+    servers = Server.objects.filter(owner=request.user)
+    context = {
+        "servers": servers,
+        "active_server": active_server,
+        "active_channel": active_channel,
+        "channels": active_server.channel_set.all(),
+    }
+    return render(request, "detail_channel.html", context)
+
+@login_required(login_url='/login/')
+def index_services(request):
+    active_server = Server.objects.filter(owner=request.user).first()
+    if active_server:
+        active_channel = active_server.channel_set.first()
+    else:
+        print("nothing here", flush=True)
+        return render(request, 'detail_channel.html', {})
+    return redirect(reverse('detail_channel', args=(active_server.pk, active_channel.pk)))

@@ -1,10 +1,13 @@
-{% extends "base.html" %}
 {% block servers %}
     <ul>
-        {% for item in server %}
-            <a href="{% url 'index_channel' item.server_id %}"><li>{{ item }}</li> </a>
-        {% empty %}
-            <li>Sorry, no items in this list.</li>
+        <li><a href="{% url 'index_services'%}">Home</a</li>
+        {% for server in servers %}
+            <a
+                href="{% url 'detail_channel' server.pk server.channel_set.first.pk %}"
+                class="{% if active_server.pk == server.pk %}active{% endif %}"
+            ><li>{{ server }}</li>
+            </a>
         {% endfor %}
+        <li><a href="{% url 'add_server' %}">Add Server</a></li>
     </ul>
 {% endblock %}

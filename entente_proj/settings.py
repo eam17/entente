@@ -61,6 +61,7 @@ TEMPLATES = [
             'entente_proj/templates/',
             'services/templates/servers',
             'services/templates/channels',
+            'register/templates/registration',
             ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -132,6 +133,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+MEDIA_ROOT= os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
 # CSS framework  django-crispy-forms will use
 CRISPY_TEMPLATE_PACK="bootstrap4"
 
@@ -139,3 +143,4 @@ TITLE='Entente'
 
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
+

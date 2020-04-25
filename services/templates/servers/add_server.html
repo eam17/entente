@@ -6,7 +6,7 @@ Create New Server
 {% load crispy_forms_tags %} {% block content %}
 <h3>Create a New Server</h3>
 <br>
-<form method="POST" action="/add_server/" class="form-group">
+<form method="POST" action="{% url 'add_server' %}" class="form-group">
   {% csrf_token %} {{ form|crispy }}
   <button type="submit" class="btn btn-success">Create</button>
 </form>

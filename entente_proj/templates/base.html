@@ -12,22 +12,24 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
 
-  <title>{% block title %}Welcome to Entente {% endblock %}</title>
+  <title>{% block title %} Welcome to Entente {% endblock%}</title>
+
 </head>
 
 <body>
-  <h1>Welcome, {{ request.user.username|default:"friend" }}. <a href="/logout/">Logout</a></h1>
+  <h1>Hello, {{ request.user.username|default:"friend" }}. <a href="/logout/">Logout</a></h1>
+  {% block home_btn %}
+    <h2><a href="{% url 'index_services'%}">Home</a></h2>
+  {% endblock %}
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
   {% block content %}
-  <div class="container">
-    <div class="row">
-      <div class="col">Something</div>
-      <div class="col">{% block servers %}{% endblock %}</div>
-      <div class="col">{% block channels %}{% endblock %}</div>
-      <div class="col">{% block action %}{% endblock %}</div>
-      <div class="col">{% block people %}{% endblock %}</div>
-    </div>
-  </div>
-{% endblock %}
+  {% endblock %}
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

@@ -6,3 +6,4 @@ class ServerForm(forms.Form):
 
 class EmptyForm(forms.Form):
     display_name = forms.CharField(widget = forms.HiddenInput(), required = False)
+
